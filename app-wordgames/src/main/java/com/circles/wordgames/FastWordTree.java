@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class FastWordTree extends WordTree {
+public class FastWordTree extends WordTree implements IWordTree {
 
 
     public FastNode root;
