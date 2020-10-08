@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Hangman {
+import com.circles.wordgames.Game.IGame;
+
+public class Hangman extends Game implements IGame {
 
     private String word;
     private final String WORDSPATH = "commonwords.txt";
-    private States gamestate;
     private ArrayList<Character> guessed = new ArrayList<Character>();
     private int correct = 0;
     private int guesses;
@@ -38,22 +39,6 @@ public class Hangman {
         return out;
 
     }
-
-
-    private String getInput(Scanner s) {
-
-        
-        String output;
-
-        output = App.scanner.next();
-
-        output = output.toLowerCase().trim();
-
-        return output;
-
-
-    }
-
 
     private Character runGuess (Scanner s) {
 
@@ -87,112 +72,7 @@ public class Hangman {
 
     }
 
-    public void runGame () {
-
-
-        Scanner s = App.scanner;
-        
-        while (gamestate != States.cleanup) {
-
-
-            switch (gamestate) {
-                case setup:
-
-                    System.out.println("Moving into setup state.");
-                
-                    try {
-                        this.word = chooseWord();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    gamestate = States.play;
-    
-                    break;
-                case play:
-    
-                    System.out.println("Moving into play state:");
-
-                    printState();
-
-                    while (correct < word.length() && guesses > 0) {
-    
-
-                        Character c = runGuess(s);
-                        
-                        if (c != null) {
-
-
-                            if(!guessed.contains(c)) {
-                                // if the letter has not already been guessed
-
-                                if (word.contains(c.toString())) {
-                                    // correct
-                                    for (char character : word.toCharArray()) {
-                                        if (c == character) {
-                                            correct++;
-                                        }
-                                    }
-                                    
-                                    System.out.println("correct guess.\n");
-                
-                                } else {
-                                    // incorrect guess
-                                    System.out.println("incorrect guess.\n");
-                                    guesses = guesses - 1;
-                                }
-
-
-                                guessed.add(c);
-        
-                            } else {
-                                // already guessed that letter
-                                System.out.println("already guessed that letter.\n");
-                                
-                            }
-
-                            // if not already guessed
-
-                        } else {
-                            System.out.println("invalid input");
-                        }
-            
-                        printState();
-            
-                    }
-    
-                    gamestate = States.end;
-    
-                    
-                    break;
-    
-                case end:
-    
-                    System.out.println("Moving into end state.");
-
-                    if (correct == word.length()) {
-                        System.out.println("You won! Congrats :D");
-                    } else {
-                        System.out.println("You lost!");
-                        System.out.println("The word was: " + word);
-                    }
-
-                    gamestate = States.cleanup;
-    
-                    break;
-    
-                default:
-                    break;
-    
-            }
-
-
-
-        }
-
-    }
-
-
+    @Override
     public void printState() {
         System.out.println(summarizeState());
     }
@@ -204,17 +84,91 @@ public class Hangman {
         return output;
     }
 
+    
+    @Override
+    public void setup() {
+        System.out.println("Moving into setup state.");
+                
+        try {
+            this.word = chooseWord();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void play(Scanner s) {
+        System.out.println("Moving into play state:");
+
+        printState();
+
+        while (correct < word.length() && guesses > 0) {
+
+
+            Character c = runGuess(s);
+            
+            if (c != null) {
+
+
+                if(!guessed.contains(c)) {
+                    // if the letter has not already been guessed
+
+                    if (word.contains(c.toString())) {
+                        // correct
+                        for (char character : word.toCharArray()) {
+                            if (c == character) {
+                                correct++;
+                            }
+                        }
+                        
+                        System.out.println("correct guess.\n");
+    
+                    } else {
+                        // incorrect guess
+                        System.out.println("incorrect guess.\n");
+                        guesses = guesses - 1;
+                    }
+
+
+                    guessed.add(c);
+
+                } else {
+                    // already guessed that letter
+                    System.out.println("already guessed that letter.\n");
+                    
+                }
+
+                // if not already guessed
+
+            } else {
+                System.out.println("invalid input");
+            }
+
+            printState();
+
+        }
+    }
+
+    @Override
+    public void end() {
+        System.out.println("Moving into end state.");
+
+        if (correct == word.length()) {
+            System.out.println("You won! Congrats :D");
+        } else {
+            System.out.println("You lost!");
+            System.out.println("The word was: " + word);
+        }
+
+    }
+
     public Hangman(int guesses) {
-
-        gamestate = States.setup;
-
-        correct = 0;
 
         this.guesses = guesses;
 
-
-
     }
+
 
 
 
