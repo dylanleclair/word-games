@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class LightWordTree extends WordTree implements IWordTree {
+public class LightWordTree extends WordTree {
 
 
 
@@ -31,7 +31,7 @@ public class LightWordTree extends WordTree implements IWordTree {
     }
 
     // to be used when running an anagrams game
-    public LightWordTree (List<String> words) throws Exception {;
+    public LightWordTree (List<String> words) {;
 
         root = new LightNode(null, '0');
         for (String word : words) {
@@ -40,42 +40,6 @@ public class LightWordTree extends WordTree implements IWordTree {
         }
     
     }
-
-    public void addWord (String word) throws Exception {
-        LightNode n = root;
-        
-        for (int i = 0; i<word.length();i++) {
-            if (n.hasChild(word.charAt(i))) {
-                n = n.letters.get(n.indexOf(word.charAt(i)));
-            } else {
-                n = n.addChild((Character) word.charAt(i));
-            }
-        }
-
-        n.accepting = true;
-
-    }
-
-
-    public boolean findWord (String word) throws Exception{
-        LightNode n = root;
-        for (int i = 0; i < word.length(); i++) {
-            if (n.hasChild(word.charAt(i))) {
-                n = n.letters.get( n.indexOf(word.charAt(i)));
-            } else {
-                return false;
-            }
-        }
-
-        // at final node
-        if (n.accepting) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
 
 
 }
