@@ -1,9 +1,12 @@
 package com.circles.wordgames;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,14 +19,16 @@ import com.circles.wordgames.Game.IGame;
 
 public class Anagrams extends Game implements IGame {
 
-    private LightWordTree wordset;
-    private ArrayList<Character> rootword;
+    protected LightWordTree wordset;
+    protected ArrayList<Character> rootword;
     private ArrayList<String> correctlyGuessed = new ArrayList<String>();
     private int score = 0;
+    public List<String> contents;
 
     public Anagrams() {
 
     }
+
 
     // chooses a random wordset from a WORDSETDIR directory
     // we now need to choose a random file from word lists
@@ -50,7 +55,7 @@ public class Anagrams extends Game implements IGame {
         InputStream is = loader.getResourceAsStream("./" + App.WORDSETDIR + File.separator + filename);
 
         BufferedReader lol = new BufferedReader(new InputStreamReader(is));
-        List<String> contents = lol.lines().collect(Collectors.toList());
+        contents = lol.lines().collect(Collectors.toList());
 
         String root = filename.substring(0,filename.length()-4);
 
@@ -71,7 +76,7 @@ public class Anagrams extends Game implements IGame {
     }
 
     
-
+    @Override
     public void setup() {
         System.out.println("Moving into setup state.");
     
@@ -88,6 +93,7 @@ public class Anagrams extends Game implements IGame {
         System.out.println("Letters: " + rootword + " (guess \"s\" to shuffle!)" + "\n");
     }
 
+    @Override
     public void play(Scanner s) {
         while (correctlyGuessed.size() < 10) {
             int addToScore = 0;
@@ -125,6 +131,7 @@ public class Anagrams extends Game implements IGame {
 
     }
 
+    @Override
     public void end() {
         System.out.println("Moving into end state.");
 
@@ -135,11 +142,12 @@ public class Anagrams extends Game implements IGame {
     }
 
 
+    @Override
     public void printState() {
         System.out.println(summarizeState());
     }
 
-    public String summarizeState() {
+    private String summarizeState() {
         String output = "\n";
         output += "Current score: " + score + ".\n";
         output += "You've correctly guessed " + correctlyGuessed.size() + " words so far.\n";
