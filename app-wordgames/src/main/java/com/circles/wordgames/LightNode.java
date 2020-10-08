@@ -2,18 +2,13 @@ package com.circles.wordgames;
 
 import java.util.ArrayList;
 
-public class LightNode {
+public class LightNode extends Node {
     
-    public LightNode parent;
-    public Character value;
-    public ArrayList<LightNode> letters;
-    public boolean accepting;
+    protected ArrayList<LightNode> letters;
 
     public LightNode (LightNode parent, Character value) {
-        this.parent = parent;
-        this.value = value;
+        super(parent,value);
         letters = new ArrayList<LightNode>();
-        accepting = false;
     }
 
     public LightNode addChild (Character value) {

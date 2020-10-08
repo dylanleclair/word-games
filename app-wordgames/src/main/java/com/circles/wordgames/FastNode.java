@@ -2,19 +2,13 @@ package com.circles.wordgames;
 
 import java.util.HashMap;
 
-public class FastNode {
+public class FastNode extends Node {
 
+    protected HashMap<Character, FastNode> letters;
 
-    public FastNode parent;
-    public char value;
-    public HashMap<Character, FastNode> letters;
-    public boolean accepting;
-
-    public FastNode (FastNode parent, char value) {
-        this.parent = parent;
-        this.value = value;
+    public FastNode (FastNode parent, char value)   {
+        super(parent,value);
         letters = new HashMap<Character, FastNode>();
-        accepting = false;
     }
 
     public FastNode addChild (char value) {
