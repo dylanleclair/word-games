@@ -157,3 +157,26 @@ We are at the point where we are pretty much done with all the Nodes (Node, Fast
 However, our main WordTree class is huge and a lot of it's code, while relevant to WordTrees, is largely unrelated to the actual function of the tree, suggesting that this class is **too long**!
 
 # Change 4: Switch statements!
+
+1. What code in which files was altered. (don’t include the full source, only the parts relevant to the refactoring).
+
+The classes for Anagrams and Hangman. 
+
+2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
+
+Switch statements. This could easily be replaced with a much nicer polymorphic implementation. 
+
+3. What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
+
+I used the replaced conditional with polymorphism method. 
+
+To start this process, I first defined an interface, IGame, and an abstract class Game to serve as the building blocks / parent class to Anagrams and Hangman (SHA: fa2c2ab). While doing this, I took some of the duplicated code (getInput) and threw it into the Game class.
+ 
+
+4. What code in which files was the result of the refactoring.
+
+5. How was the code tested? 
+
+6. Why is the code better structured after the refactoring? 
+
+7. Does the result of the refactoring suggest or enable further refactorings?

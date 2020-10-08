@@ -12,11 +12,12 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class Anagrams {
+import com.circles.wordgames.Game.IGame;
+
+public class Anagrams extends Game implements IGame {
 
     private LightWordTree wordset;
     private ArrayList<Character> rootword;
-    private States gamestate;
     private ArrayList<String> correctlyGuessed = new ArrayList<String>();
     private int score = 0;
 
@@ -69,123 +70,68 @@ public class Anagrams {
 
     }
 
-
-
-    private String getInput(Scanner s) {
-
-        String output;
-
-        output = App.scanner.next();
-
-        output = output.toLowerCase().trim();
-
-        return output;
-
-    }
     
 
-    public void runGame() {
+    public void setup() {
+        System.out.println("Moving into setup state.");
+    
+        try {
+            System.out.println("Loading word list.");
+            this.wordset = chooseWordSet();
 
-        Scanner s = App.scanner;
-        gamestate = States.setup;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        while (gamestate != States.cleanup) {
+        Collections.shuffle(rootword);
+        System.out.println("Starting game! Find as many anagrams as you can!");
+        System.out.println("Letters: " + rootword + " (guess \"s\" to shuffle!)" + "\n");
+    }
 
-            switch (gamestate) {
-                case setup:
+    public void play(Scanner s) {
+        while (correctlyGuessed.size() < 10) {
+            int addToScore = 0;
+            String guess = getInput(s);
 
-                    System.out.println("Moving into setup state.");
-                
+            if (guess.contentEquals("s")) {
+                Collections.shuffle(rootword);
+
+                System.out.println("Words have been shuffled!");
+
+            } else {
+                if (!correctlyGuessed.contains(guess)) {
                     try {
-                        System.out.println("Loading word list.");
-                        this.wordset = chooseWordSet();
-
+                        if (wordset.findWord(guess)) {
+                            
+                            addToScore = (guess.length() * guess.length() ) * 100;
+                            correctlyGuessed.add(guess);
+                            System.out.println("Correct! +" + addToScore + "!");
+                        } else { 
+                            System.out.println("Not an anagram! :(");
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-
-                    Collections.shuffle(rootword);
-                    System.out.println("Starting game! Find as many anagrams as you can!");
-                    System.out.println("Letters: " + rootword + " (guess \"s\" to shuffle!)" + "\n");
-                    gamestate = States.play;
-    
-                    break;
-                case play:
-                        // get input
-
-
-                    
-                    
-
-                    while (correctlyGuessed.size() < 10) {
-                        int addToScore = 0;
-                        String guess = getInput(s);
-
-                        if (guess.contentEquals("s")) {
-                            Collections.shuffle(rootword);
-
-                            System.out.println("Words have been shuffled!");
-
-                        } else {
-                            if (!correctlyGuessed.contains(guess)) {
-                                try {
-                                    if (wordset.findWord(guess)) {
-                                        
-                                        addToScore = (guess.length() * guess.length() ) * 100;
-                                        correctlyGuessed.add(guess);
-                                        System.out.println("Correct! +" + addToScore + "!");
-                                    } else { 
-                                        System.out.println("Not an anagram! :(");
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-        
-                            } else {
-                                System.out.println("You've already guessed that!");
-                            }
-                            score += addToScore;
-                        }
-
-
-                        printState();
-                    }
-
-                        // feed thru tree
-
-                        // voila
-                        
-            
-                    
-    
-                    gamestate = States.end;
-    
-                    
-                    break;
-    
-                case end:
-    
-                    System.out.println("Moving into end state.");
-
-                    // if timeout, print "run out of time!" and summarize state
-
-                    System.out.println("You've won! :D");
-                    printState();
-
-                    gamestate = States.cleanup;
-    
-                    break;
-    
-                default:
-                    break;
-    
+                } else {
+                    System.out.println("You've already guessed that!");
+                }
+                score += addToScore;
             }
 
 
-
+            printState();
         }
 
+    }
+
+    public void end() {
+        System.out.println("Moving into end state.");
+
+        // if timeout, print "run out of time!" and summarize state
+
+        System.out.println("You've won! :D");
+        printState();
     }
 
 
