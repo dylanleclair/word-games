@@ -66,4 +66,33 @@ public class TreeTests {
 
     }
 
+    @Test
+    public void TestTreesTogether() {
+
+        List<String> words = Arrays.asList("hello", "a", "bee");
+        List<String> fakeWords = Arrays.asList("h", "", "be");
+
+        //WordTree fast = new FastWordTree(words);
+        WordTree light = new LightWordTree(words);
+        WordTree fast = new FastWordTree(words);
+
+
+        List<IWordTree> trees = Arrays.asList(fast,light);
+
+        for (IWordTree tree : trees) {
+
+            for (String word : words) {
+                assertTrue(tree.findWord(word));
+            }
+
+            for (String word : fakeWords) {
+                assertFalse(tree.findWord(word));
+            }
+        }
+
+
+
+    }
+
+
 }

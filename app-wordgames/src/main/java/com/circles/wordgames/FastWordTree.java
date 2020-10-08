@@ -8,9 +8,6 @@ import java.util.HashMap;
 
 public class FastWordTree extends WordTree {
 
-
-    public FastNode root;
-
     public FastWordTree () throws Exception {
 
         InputStream is = getClass().getClassLoader().getResourceAsStream(App.ANAGRAMSWORDLIST);
@@ -33,11 +30,9 @@ public class FastWordTree extends WordTree {
     }
 
     // to be used when running an anagrams game
-    public FastWordTree (List<String> words) throws Exception {;
+    public FastWordTree (List<String> words) {;
 
         root = new FastNode(null, '0');
-
-
         for (String word : words) {
             word.toLowerCase().trim();
             addWord(word);
