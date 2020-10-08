@@ -28,7 +28,6 @@ public class FastNode extends Node  implements INode {
 
     @Override
     public FastNode getChild (Character value) {
-        
         return letters.get(Character.valueOf(value));
     }
 

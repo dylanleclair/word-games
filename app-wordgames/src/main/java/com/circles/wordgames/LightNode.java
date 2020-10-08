@@ -2,7 +2,7 @@ package com.circles.wordgames;
 
 import java.util.ArrayList;
 
-public class LightNode extends Node {
+public class LightNode extends Node implements INode {
     
     protected ArrayList<LightNode> letters;
 
@@ -11,29 +11,22 @@ public class LightNode extends Node {
         letters = new ArrayList<LightNode>();
     }
 
-    public LightNode addChild (Character value) {
+    @Override
+    public INode addChild(Character value) {
         LightNode n = new LightNode(this,value);
         letters.add(n);
         return n;
     }
 
-    public boolean hasChild (Character value) {
-        for (LightNode letter : letters) {
-            if (letter.value == value)
-                return true;
-        }
+    @Override
+    public INode getChild(Character value) {
 
-        return false;
-    }
-
-    public int indexOf (Character letter) throws Exception {
-        for (int i = 0; i < letters.size();i++) {
-            if (letter == letters.get(i).value) {
-                return i;
+        for (INode item : letters) {
+            if (item.getValue() == value) {
+                return item;
             }
         }
-
-        throw new NoSuchFieldException();
+        return null;
     }
 
 
