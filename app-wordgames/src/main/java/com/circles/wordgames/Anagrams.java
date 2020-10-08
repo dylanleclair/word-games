@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class Anagrams {
 
-    private WordTree wordset;
+    private LightWordTree wordset;
     private ArrayList<Character> rootword;
     private States gamestate;
     private ArrayList<String> correctlyGuessed = new ArrayList<String>();
@@ -26,7 +26,7 @@ public class Anagrams {
 
     // chooses a random wordset from a WORDSETDIR directory
     // we now need to choose a random file from word lists
-    private WordTree chooseWordSet() throws Exception {
+    private LightWordTree chooseWordSet() throws Exception {
 
 
         ArrayList<String> files = new ArrayList<String>();
@@ -64,7 +64,7 @@ public class Anagrams {
 
         lol.close();
 
-        return new WordTree(contents);
+        return new LightWordTree(contents);
 
 
     }
@@ -116,7 +116,7 @@ public class Anagrams {
 
 
                     
-
+                    
 
                     while (correctlyGuessed.size() < 10) {
                         int addToScore = 0;
