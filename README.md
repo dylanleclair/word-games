@@ -80,7 +80,7 @@ I started by first defining actual interfaces for Node and WordTree, called INod
 
 Then I went ahead and implemented INode in both types of nodes. (SHA: 184a683).
 
-Now that I had standardized methods I could use to add a child and retreive a child from either type of Node, it then became possible to **extract the methods** for adding words and finding words from LightWordTree and FastWordTree **into the parent class** for each of these: WordTree (SHA: 4a29870).
+Now that I had standardized methods I could use to add a child and retreive a child from either type of Node, it then became possible to **extract the methods** for adding words and finding words from LightWordTree and FastWordTree **into the parent class** for each of these: WordTree (SHA: 4a29870). I **renamed** the methods of LightNode to match the interface. Then, my interface allowed me to **extract** the findWord and addWord methods in the different forms of trees to  **to the superclass**.
 
 
 4.What code in which files was the result of the refactoring.
@@ -95,6 +95,10 @@ I did make a small change to the test code by changing the declared type of each
 
 They passed the tests as expected.
 
+Then, to really capitalize on how useful interfaces can be, I created a list of IWordTrees - containing both a FastWordTree and a LightWordTree, then iterated over it, testing if the expected words were found and the fake words were not. 
+
+At first this didn't pass, but after some debugging, I found that I forgot to remove a field from FastWordTree that was replaced by WordTree. After fixing this, the tests worked! My interface implementation was spotless.  (SHA: 595b50a)
+
 6.Why is the code better structured after the refactoring? 
 
 The code is vastly improved after this stage of refactoring, since we can work with each of the different types of trees in exactly the same way. 
@@ -107,3 +111,47 @@ Instead of having to look at different references in my code if it were a librar
 
 Yes! Now that we've gutted a lot of the duplicated code from both types of Tree and both types of Node, they're looking a little **lazy**.
 
+# Change 3: Combining the classes for Nodes and Trees. 
+
+1.What code in which files was altered. (don’t include the full source, only the parts relevant to the refactoring).
+
+The code in Node and WordTree were paired together into IWordTree.
+
+The code in LightWordTree and LightNode were paired together into LightWordTree.
+
+The code in FastWordTree and FastNode were paired together into FastWordTree.
+
+2.What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
+
+I had a number of **lazy classes**. After moving around so much code in the first two refactorings, all of these classes were looking pretty empty. Additionally, it just makes sense for the nodes of a tree, which are only ever accessed by that tree, to be inline with the tree class.
+
+3.What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
+
+Along with the **move method** in other refactorings, I eliminated these problems with inline class. 
+
+I brought Node inline with WordTree (SHA: e95a49e).
+
+I brought LightNode inline with LightWordTree (SHA: 4da1e89).
+
+Finally, I brought FastNode inline with FastWordTree (SHA: 84e10ff)
+
+
+4.What code in which files was the result of the refactoring.
+
+This is described above.
+
+5.How was the code tested? 
+
+Like the last refactoring, I ran all my tests again to ensure that my code maintained it's functionality with these changes.
+
+6.Why is the code better structured after the refactoring? 
+
+Instead of having to open a huge amount of files to change the inner workings of a given kind of tree, they are now all in one (appropriately labelled) place. 
+
+All relevant code is grouped nicely together for future development!
+
+7.Does the result of the refactoring suggest or enable further refactorings?
+
+We are at the point where we are pretty much done with all the Nodes (Node, FastNode, LightNode).
+
+However, our main WordTree class is huge and a lot of it's code, while relevant to WordTrees, is largely unrelated to the actual function of the tree, suggesting that this class is **too long**!
