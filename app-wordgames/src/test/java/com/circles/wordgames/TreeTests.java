@@ -2,6 +2,8 @@ package com.circles.wordgames;
 
 import java.util.List;
 import java.util.Arrays;
+
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -17,12 +19,16 @@ public class TreeTests {
     public void testLightTree() {
 
         List<String> words = Arrays.asList("hello", "a", "bee");
-
+        List<String> fakeWords = Arrays.asList("h", "", "be");
         try {
             LightWordTree light = new LightWordTree(words);    
 
             for (String word : words) {
                 assertTrue(light.findWord(word));
+            }
+
+            for (String word : fakeWords) {
+                assertFalse(light.findWord(word));
             }
 
         } catch (Exception e) {
@@ -37,6 +43,7 @@ public class TreeTests {
     public void testFastTree() {
 
         List<String> words = Arrays.asList("hello", "a", "bee");
+        List<String> fakeWords = Arrays.asList("h", "", "be");
 
         try {
             FastWordTree fast = new FastWordTree(words);    
@@ -44,6 +51,12 @@ public class TreeTests {
             for (String word : words) {
                 assertTrue(fast.findWord(word));
             }
+
+
+            for (String word : fakeWords) {
+                assertFalse(fast.findWord(word));
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
