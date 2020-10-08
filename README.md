@@ -155,3 +155,5 @@ All relevant code is grouped nicely together for future development!
 We are at the point where we are pretty much done with all the Nodes (Node, FastNode, LightNode).
 
 However, our main WordTree class is huge and a lot of it's code, while relevant to WordTrees, is largely unrelated to the actual function of the tree, suggesting that this class is **too long**!
+
+# Change 4: Switch statements!
