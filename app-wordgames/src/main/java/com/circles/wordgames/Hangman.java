@@ -9,7 +9,7 @@ import com.circles.wordgames.Game.IGame;
 
 public class Hangman extends Game implements IGame {
 
-    private String word;
+    protected String word;
     private final String WORDSPATH = "commonwords.txt";
     private ArrayList<Character> guessed = new ArrayList<Character>();
     private int correct = 0;

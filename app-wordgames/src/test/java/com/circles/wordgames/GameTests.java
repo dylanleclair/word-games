@@ -67,10 +67,114 @@ public class GameTests {
 
     }
 
+    @Test
+    public void TestHangmanWin () {
 
-    public void TestHangman () {
+        Hangman h = new Hangman(10);
+        h.setup();
 
-        
+        // create variable to test against
+        boolean out = false;
+
+        try {
+
+
+            String testAgainst = "";
+
+            String w = h.word;
+            
+            // guess every letter in the word. We should win at this point.
+            for (Character c : w.toCharArray()) {
+                testAgainst += c;
+                testAgainst += System.lineSeparator();
+            }
+
+            byte[] lettersToGuess = testAgainst.getBytes();
+            InputStream is = new ByteArrayInputStream(lettersToGuess);
+
+            Scanner scanner = new Scanner(is);
+
+            PrintStream orig = System.out;
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(os, false, "UTF-8"));
+
+            h.play(scanner);
+
+
+            scanner.close();
+
+            h.end();
+
+            out = (os.toString().contains("You won! Congrats :D"));
+
+            System.setOut(orig);
+            System.out.println(out);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+ 
+        assertTrue(out);
+
+    }
+
+    @Test
+    public void TestHangmanLoss () {
+
+        Hangman h = new Hangman(10);
+        h.setup();
+
+        // create variable to test against
+        boolean out = false;
+
+        try {
+
+
+            String testAgainst = "";
+
+            String alphabet= "abcdefghijklmnopqrstuvwxyz";
+
+            String w = h.word;
+            
+            // guess every letter in the word. We should win at this point.
+            for (Character c : alphabet.toCharArray()) {
+
+                if (!w.contains(c.toString())) {
+                    testAgainst += c;
+                    testAgainst += System.lineSeparator();
+                }
+
+            }
+
+            byte[] lettersToGuess = testAgainst.getBytes();
+            InputStream is = new ByteArrayInputStream(lettersToGuess);
+
+            Scanner scanner = new Scanner(is);
+
+            PrintStream orig = System.out;
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(os, false, "UTF-8"));
+
+            h.play(scanner);
+
+
+            scanner.close();
+
+            h.end();
+
+            out = (os.toString().contains("You lost!"));
+
+            System.setOut(orig);
+            System.out.println(out);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+ 
+        assertTrue(out);
+
     }
 
 
