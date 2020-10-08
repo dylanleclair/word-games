@@ -2,7 +2,7 @@ package com.circles.wordgames;
 
 import java.util.HashMap;
 
-public class FastNode extends Node  implements INode {
+public class FastNode extends Node implements INode {
 
     protected HashMap<Character, FastNode> letters;
 

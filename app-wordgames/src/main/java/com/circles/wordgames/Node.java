@@ -10,24 +10,24 @@ public abstract class Node  {
 
     }
 
-    void setParent (INode parent) {
+    public void setParent (INode parent) {
         this.parent = parent;
     }
-    INode getParent () {
+    public INode getParent () {
         return parent;
     }
 
-    void setAccepting (boolean accepting) {
+    public void setAccepting (boolean accepting) {
         this.accepting = accepting;
     }
-    boolean getAccepting () {
+    public boolean getAccepting () {
         return accepting;
     }
 
-    void setValue (Character value) {
+    public void setValue (Character value) {
         this.value = value;
     }
-    Character getValue () {
+    public Character getValue () {
         return value;
     }
 
