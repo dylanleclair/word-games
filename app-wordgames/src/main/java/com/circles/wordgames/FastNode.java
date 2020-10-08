@@ -2,7 +2,7 @@ package com.circles.wordgames;
 
 import java.util.HashMap;
 
-public class FastNode extends Node {
+public class FastNode extends Node implements INode {
 
     protected HashMap<Character, FastNode> letters;
 
@@ -11,7 +11,8 @@ public class FastNode extends Node {
         letters = new HashMap<Character, FastNode>();
     }
 
-    public FastNode addChild (char value) {
+    @Override
+    public FastNode addChild (Character value) {
         FastNode n = new FastNode(this,value);
         letters.put(value,n);
         return n;
@@ -25,8 +26,8 @@ public class FastNode extends Node {
         }
     }
 
-    public FastNode getChild (char letter) {
-        
+    @Override
+    public FastNode getChild (Character value) {
         return letters.get(Character.valueOf(value));
     }
 

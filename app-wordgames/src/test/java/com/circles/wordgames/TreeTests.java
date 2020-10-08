@@ -21,7 +21,7 @@ public class TreeTests {
         List<String> words = Arrays.asList("hello", "a", "bee");
         List<String> fakeWords = Arrays.asList("h", "", "be");
         try {
-            LightWordTree light = new LightWordTree(words);    
+            IWordTree light = new LightWordTree(words);    
 
             for (String word : words) {
                 assertTrue(light.findWord(word));
@@ -46,7 +46,7 @@ public class TreeTests {
         List<String> fakeWords = Arrays.asList("h", "", "be");
 
         try {
-            FastWordTree fast = new FastWordTree(words);    
+            IWordTree fast = new FastWordTree(words);    
 
             for (String word : words) {
                 assertTrue(fast.findWord(word));

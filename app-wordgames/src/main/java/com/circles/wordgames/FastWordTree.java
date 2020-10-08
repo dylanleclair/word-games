@@ -45,42 +45,4 @@ public class FastWordTree extends WordTree {
     }
 
 
-
-    public void addWord (String word) throws Exception {
-        FastNode n = root;
-        
-        for (int i = 0; i<word.length();i++) {
-            if (n.hasChild(word.charAt(i))) {
-                n = n.getChild(word.charAt(i));
-            } else {
-                n = n.addChild((Character) word.charAt(i));
-            }
-        }
-
-        n.accepting = true;
-
-    }
-
-
-    public boolean findWord (String word) throws Exception{
-        FastNode n = root;
-        for (int i = 0; i < word.length(); i++) {
-            if (n.hasChild(word.charAt(i))) {
-                n = n.getChild(word.charAt(i));
-            } else {
-                return false;
-            }
-        }
-
-        // at final node
-        if (n.accepting) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-
-
 }

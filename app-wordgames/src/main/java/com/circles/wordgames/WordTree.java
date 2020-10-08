@@ -13,15 +13,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public abstract class WordTree {
+public abstract class WordTree implements IWordTree {
 
 
     protected final String WORDSNDIR = "wordsbylength";
     protected final String WORDSETDIR = "wordsets";
 
-    protected Node root;
+    protected INode root;
 
-    public ArrayList<String> findPermutations(String word) throws Exception {
+    public ArrayList<String> findPermutations(String word) {
         
 
         ArrayList<String> output = new ArrayList<String>();
@@ -39,21 +39,63 @@ public abstract class WordTree {
         return output;
     }
 
-    private void findPermutationsHelper (Node node, ArrayList<Character> characters, ArrayList<String> permutations) throws Exception { 
+
+    public void addWord (String word) {
+        INode n = root;
+        
+        for (int i = 0; i<word.length();i++) {
+            
+            INode check = n.getChild(word.charAt(i));
+            if (check != null) {
+                n = check;
+            } else {
+                n = n.addChild((Character) word.charAt(i));
+            }
+        }
+
+        n.setAccepting(true);
+
+    }
+
+
+    public boolean findWord (String word) {
+        INode n = root;
+        for (int i = 0; i < word.length(); i++) {
+
+            INode check = n.getChild(word.charAt(i));
+
+            if (check != null) {
+                n = check;
+            } else {
+                return false;
+            }
+            
+        }
+
+        // at final node
+        if (n.getAccepting()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
+    private void findPermutationsHelper (INode node, ArrayList<Character> characters, ArrayList<String> permutations) { 
         
         if (characters.size() > 0 ) {
-            for (char c : characters) {
-                boolean hasChild = node.hasChild(c);
+            for (Character c : characters) {
+                
+                INode check = node.getChild(c);
 
-                if (hasChild) {
-                    Node check = node.letters.get(node.indexOf(c));
-
+                if (node.getChild(c) != null) {
                     
                     ArrayList<Character> copyCharacters = new ArrayList<Character>(characters);
 
                     copyCharacters.remove((Character) c);
                     
-                    if (check.accepting) {
+                    if (check.getAccepting()) {
                         String word = BubbleUp(check);
                         
                         if (word.length() >= 2 && !permutations.contains(word)) {
@@ -66,7 +108,7 @@ public abstract class WordTree {
                    
                     
                     findPermutationsHelper(check, copyCharacters, permutations);
-                } 
+                }
 
             }
 
@@ -75,7 +117,7 @@ public abstract class WordTree {
 
             String word = BubbleUp(node);
 
-            if (!permutations.contains(word) && node.accepting) {
+            if (!permutations.contains(word) && node.getAccepting()) {
                 permutations.add(word);
             }
         
@@ -86,14 +128,14 @@ public abstract class WordTree {
 
     }
 
-    public String BubbleUp(Node node) {
+    public String BubbleUp(INode node) {
         ArrayList<Character> chars = new ArrayList<Character>();
         
-        Node n = node;
+        INode n = node;
 
-        while (n.parent != null) {
-            chars.add(n.value);
-            n = n.parent;
+        while (n.getParent() != null) {
+            chars.add(n.getValue());
+            n = n.getParent();
         }
 
         java.util.Collections.reverse(chars);
@@ -110,13 +152,13 @@ public abstract class WordTree {
 
 
 
-    public void generateAnagramsSets(int minlength, int maxlength, int target) throws Exception {
+    public void generateAnagramsSets(int minlength, int maxlength, int target) {
 
         // finish porting
 
         if (minlength > maxlength || minlength < 0 || maxlength < 2 || target < 0)
         {
-            throw new Exception("Invalid parameters.");
+            return;
         }
 
         // generate list of words in tree with length = maxlength
@@ -253,17 +295,6 @@ public abstract class WordTree {
 
 
     }
-
-    // wordsLengthN. 
-
-
-
-    // add code for wordsearch
-        // will find a bunch of random words, add them to list
-        // will then generate a board
-        // scan the board for words not in list
-        // add to list / tree
-
 
 
 }
