@@ -15,7 +15,7 @@ public class Anagrams extends Game implements IGame {
     private int score = 0;
     public ArrayList<String> contents;
 
-    private final boolean debug = true;
+    private final boolean debug = false;
 
     public Anagrams() {
 
