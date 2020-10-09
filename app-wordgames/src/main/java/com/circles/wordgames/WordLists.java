@@ -197,7 +197,7 @@ public class WordLists {
                     copyCharacters.remove((Character) c);
                     
                     if (check.getAccepting()) {
-                        String word = BubbleUp(check);
+                        String word = WordTree.BubbleUp(check);
                         
                         if (word.length() >= 2 && !permutations.contains(word)) {
                             permutations.add(word);
@@ -216,7 +216,7 @@ public class WordLists {
 
         } else  { // no more characters
 
-            String word = BubbleUp(node);
+            String word = WordTree.BubbleUp(node);
 
             if (!permutations.contains(word) && node.getAccepting()) {
                 permutations.add(word);
@@ -229,28 +229,5 @@ public class WordLists {
 
     }
 
-
-
-    public String BubbleUp(INode node) {
-        ArrayList<Character> chars = new ArrayList<Character>();
-        
-        INode n = node;
-
-        while (n.getParent() != null) {
-            chars.add(n.getValue());
-            n = n.getParent();
-        }
-
-        java.util.Collections.reverse(chars);
-
-        String out = "";
-
-        for (Character c : chars) {
-            out += c;
-        }
-
-        return out;
-
-    }
 
 }

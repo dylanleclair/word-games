@@ -1,5 +1,6 @@
 package com.circles.wordgames;
 
+import java.util.ArrayList;
 
 public abstract class WordTree implements IWordTree {
 
@@ -49,6 +50,27 @@ public abstract class WordTree implements IWordTree {
 
 
 
+    public static String BubbleUp(INode node) {
+        ArrayList<Character> chars = new ArrayList<Character>();
+        
+        INode n = node;
+
+        while (n.getParent() != null) {
+            chars.add(n.getValue());
+            n = n.getParent();
+        }
+
+        java.util.Collections.reverse(chars);
+
+        String out = "";
+
+        for (Character c : chars) {
+            out += c;
+        }
+
+        return out;
+
+    }
 
 
 
