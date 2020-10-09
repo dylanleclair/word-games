@@ -142,7 +142,7 @@ public class WordLists {
 
         for (String word : perms) {
             int size = word.length();
-            if (size <= p.maxlength && size >= Math.min(2, size)) {
+            if (size <= p.maxlength && size >= Math.max(2, p.minlength)) {
                 output.add(word);
             }
         }
