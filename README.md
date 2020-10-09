@@ -10,7 +10,7 @@
 
 The code in WordTree.java and FastWordTree.java. (see: a41eff2b0457f6401cbf39d134c999ca96585a6c)
 
-### ### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
+### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
 
 The bad code smell in this was definitely **duplicated code**. More specifically, I had similar code in sibling classes - specifically FastTree and WordTree, as well as FastNode and Node. 
 
@@ -62,7 +62,7 @@ LightTree.java, FastTree.java, WordTree.java, LightNode.java, FastNode.java and 
 
 ### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
 
-The bad code smell in this was alternative classes.
+The bad code smell in this was **alternative classes**.
 
 LightTree and FastTree accomplish the same task: providing a word-tree to be used in generating and running a game of anagrams.
 
@@ -74,7 +74,7 @@ By making the Trees and Nodes implement an interface, I code ensure that they ha
 
 An example I came across of displays a bit of a **shotgun surgery** that was resulting from my code structure: whenever I wanted to get a LightNode, I would have to use the hasChild to identify it and letters.get() to actually retreive the child node. Whenever I modified a bit of this code, I would have to change it across every method this action was performed.
 
-By making INode implement a getChild method that returns the child node, I was able to make remove the differing methods between the classes by combining (**move method**) hasChild() and indexOf() into a new method called getChild() (**using the rename method**). My code now could be used in the same way across implementations now that redundant code was out of the way. How I did this is detailed further below (see 3).
+By making INode implement a getChild method that returns the child node, I was able to make remove the differing methods between the classes by combining (**move method**) hasChild() and indexOf() from LightWordTree into a new method called getChild() (**using the rename method**). My code now could be used in the same way across implementations and I could remove redundant code (hasChild(), indexOf()) out of the way. How I did this is detailed further below (see last paragraph of 3).
 
 ### 3. What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
 
@@ -110,7 +110,7 @@ The code is vastly improved after this stage of refactoring, since we can work w
 
 This means that regardless of whether we choose to work with a FastTree or a LightTree, we can add and find words in the exact same manner. 
 
-This allows developers to work with whatever tree fits their needs without looking at separate APIs for each type of WordTree, and makes working with them a lot more pleasant and flexible. 
+This allows developers to work with whatever tree fits their needs without looking at separate documentation for each type of WordTree, and makes working with them a lot more pleasant to work with since they can be interchanged very easily with this new structure.
 
 Additionally, there is very little code duplication remaining between the different tree and node classes.
 
@@ -118,15 +118,15 @@ Additionally, there is very little code duplication remaining between the differ
 
 Yes! Now that we've gutted a lot of the duplicated code from both types of Tree and both types of Node, they're looking a little **lazy**.
 
+### At this point, I completed my first branch and merge (SHA: bcf61d94c3c748c45d4305b3de28e714144adf85)
+
 # Change 3: Combining the classes for Nodes and Trees. 
 
 ### 1. What code in which files was altered. (don’t include the full source, only the parts relevant to the refactoring).
 
-The code in Node and WordTree were paired together into IWordTree.
+The code in LightWordTree.java and LightNode.java were paired together into LightWordTree.java.
 
-The code in LightWordTree and LightNode were paired together into LightWordTree.
-
-The code in FastWordTree and FastNode were paired together into FastWordTree.
+The code in FastWordTree.java and FastNode.java were paired together into FastWordTree.java.
 
 ### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
 
@@ -134,7 +134,7 @@ I had a number of **lazy classes**. After moving around so much code in the firs
 
 ### 3. What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
 
-Along with the **move method** in other refactorings, I eliminated these problems with inline class. 
+Along with the **move method** in other refactorings, I eliminated these problems by **moving the node classes inline with the tree classes**. 
 
 I brought Node inline with WordTree (SHA: e95a49e).
 
@@ -149,11 +149,13 @@ The code described above was changed. Click on the SHA's to see the changes made
 
 ### 5. How was the code tested? 
 
-Like the last refactoring, I ran all my tests again to ensure that my code maintained it's functionality with these changes.
+Like the last refactoring, I ran all my tests again to ensure that my code maintained it's functionality with these changes. At the end of the day I only moved a bit of code around so there wasn't much room for testing in this refactoring.
 
 ### 6. Why is the code better structured after the refactoring? 
 
 Instead of having to open a huge amount of files to change the inner workings of a given kind of tree, they are now all in one (appropriately labelled) place. 
+
+To modify either type of WordTree specifically, you simply have to open either LightWordTree.java or FastWordTree.java and edit the corresponding node behaviour within them. 
 
 All relevant code is grouped nicely together for future development!
 
@@ -161,31 +163,33 @@ All relevant code is grouped nicely together for future development!
 
 We are at the point where we are pretty much done with all the Nodes (Node, FastNode, LightNode).
 
-However, our main WordTree class is huge and a lot of it's code, while relevant to WordTrees, is largely unrelated to the actual function of the tree, suggesting that this class is **too long**!
+However, our main WordTree class is huge and a lot of it's code, while relevant to WordTrees, is largely unrelated to the actual function/structure of the word tree itself, suggesting that this class is **too long**!
+
+Before we get to that however, let's take a break from these classes and get crafty with our game code.
 
 # Change 4: Switch statements!
 
 ### 1. What code in which files was altered. (don’t include the full source, only the parts relevant to the refactoring).
 
-The classes for Anagrams and Hangman. 
+The classes for Anagrams and Hangman: Anagrams.java and Hangman.java. 
 
 ### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
 
-Switch statements. This could easily be replaced with a much nicer polymorphic implementation. 
+**Switch statements**. This could easily be replaced with a much nicer polymorphic implementation. 
 
 ### 3. What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
 
-I used the replaced conditional with polymorphism method. 
+I used the **replaced conditional with polymorphism** method. 
 
-To start this process, I first defined an interface, IGame, and an abstract class Game to serve as the building blocks / parent class to Anagrams and Hangman (SHA: fa2c2ab). While doing this, I took some of the duplicated code (getInput) and threw it into the Game class.
+To start this process, I first defined an interface, IGame.java, and an abstract class Game.java to serve as the building blocks / parent class to Anagrams and Hangman (SHA: fa2c2ab). While doing this, I took some of the duplicated code (getInput()) and threw it into the Game class.
 
-Next, I removed the switch and implemented the interface methods in place of the switch logic in Anagrams. This also gave me the oppourtunity to remove the gamestate field from Anagrams (SHA: 6c5e30b).
+Next, I **removed the switch** and implemented the interface methods in place of the switch logic in Anagrams. This also gave me the oppourtunity to remove the gamestate field from Anagrams (SHA: 6c5e30b).
 
-On the same commit, I quickly whipped up a static method in App to run any sort of IGame (SHA: 6c5e30b), since this is where games would be loaded and run.
+On the same commit, I quickly whipped up a static method in App to run any sort of IGame (SHA: 6c5e30b), since this is where games would be loaded and run. **This uses the polymorphic nature of an IGame in place of conditional logic!**
 
 After this, I did the exact same sort of modifications to Hangman, which had a similar structure to Anagrams thanks to my switch statement and States enum (SHA: 30bba00).
 
-Now, my States enum was completely defunct and no longer necessary to keep around so I booted it from the project. 
+Now, my States enum was completely defunct and no longer necessary to keep around so I booted it from the project (hidden in SHA: 1cbc521). 
 
 
 ### 4. What code in which files was the result of the refactoring.
@@ -197,6 +201,12 @@ The code described above was changed. Click on the SHA's to see the changes made
 I tested this code by running each of the games in my command line and ensuring they still behaved the same way after the structural changes.
 
 Then, I took this one step further, researched how to simulate actual console input / output and implemented this into a test. 
+
+The references I looked at (didn't really copy from) are:
+
+- https://www.javacodegeeks.com/2019/02/approach-simulate-input-check-output.html
+
+- https://stackoverflow.com/questions/6415728/junit-testing-with-simulated-user-input
 
 I started with Anagrams. 
 
@@ -214,32 +224,35 @@ Not only is it well tested for future changes to the structure of the code, we e
 
 It is also much more readable and compact than the switch statement, which was huge. 
 
-Additionally, this completely avoids a problem that might crop up in the future of the development of these games, where they may have different varieties, or the gameplay is more advanced (time limits, score goals, etc.). Instead of having to use (one or several) switch statements, or god forbid, having a gargantuan switch that handles everything (and adding more and more states to States.java) they can simply add methods to the IGame interface and implement them as necessary. (ex: runGameTimed(...) if they wanted to make a timed version of anagrams)
+Additionally, this completely avoids a problem that might crop up in the future of the development of these games, where they may have different varieties, or the gameplay is more advanced (time limits, score goals, etc.). 
+
+Instead of having to use (one or several) switch statements, or god forbid, having a gargantuan switch that handles everything (and adding more and more states to States.java) they can simply create new children of IGame to create other iterations of wordgames. (ex: runAnagramsTimed(...) if they wanted to make a timed version of anagrams)
 
 ### 7. Does the result of the refactoring suggest or enable further refactorings?
 
-Yes. Specifically in my test code. They're not the prettiest or paradigm-perfect tests, but they get the job done and took me too long to make for me to try and refactor them... at least not until I've finished the rest of the assignment.
+Yes. Specifically in my test code. They're not the prettiest or paradigm-perfect tests, but they get the job done and took me too long to make for me to try and refactor them. Especially since I have to revisit a the WordTrees and nodes before that.
 
-
-# Change 5: Divergent Change (large classes)
+# Change 5: Divergent Change (& large classes)
 
 ### 1. What code in which files was altered. (don’t include the full source, only the parts relevant to the refactoring).
 
-My code for WordTree was altered. If I wanted to change the code concerning the actual tree structure, I would have to scroll through tons of code for generating sets of anagrams instead.
+My code for WordTree.java was altered. If I wanted to change the code concerning the actual tree structure, I would have to scroll through tons of code for generating sets of anagrams instead.
+
+Additionally, a new class called WordLists.java was created to store the code that would be moved.
 
 ### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
 
-The bad code smell I have here is large classes - the WordTree class is huge and a lot of it’s methods, while concerned with WordTrees, don’t actually serve a purpose in the structure of the tree and would be more suited to a static helper class.
+The bad code smell I have here is **large classes** - the WordTree class is huge and a lot of it’s methods, while concerned with WordTrees, don’t actually serve a purpose in the structure of the tree and would be more suited to a static helper class.
 
-When I wanted to change the behaviour of the tree, I was dealing with addWord, findWord and it's constructors. 
+When I wanted to change the behaviour of the tree, I was dealing with addWord(), findWord() and it's constructors. 
 
-This left findPermutations, generateAnagramsSets, and wordsLengthN left out to dry. 
+This left the methods findPermutations(), generateAnagramsSets(), and wordsLengthN() left out to dry. 
 
 I was doing exactly what is described: changing half the code in WordTree for one purpose, and changing the rest for another.
 
 ### 3. What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
 
-I used the **extract class** method. I simply moved the operations of this class into a new helper class titled "WordLists.java". (SHA: 1cbc521)
+I used the **extract class** method. I simply moved the operations of this class into a new helper class titled WordLists.java. (SHA: 1cbc521)
 
 I later decided BubbleUp would be more appropriate in the WordTree class as it is concerned with a common tree operation: returning a word in the tree from an accepting node. (SHA: b4fa64c)
 
@@ -267,21 +280,21 @@ At first I had been trying to configure my paths / resources so that I could jus
 
 I now face the task of getting rid of it all and replacing it with a runtime anagram-list generator instead. 
 
-While this hurts the memory for a teensy bit (loading large wordlists can take a chunk of memory), once it has the wordlist it needs, the massive wordlist can be tossed into the trash.
+While this hurts the memory for a teensy bit (loading large wordlists can take a chunk of memory), once it has the wordlist it needs, the massive wordlist can be tossed into the trash and overall the program is still pretty lightweight.
 
 ### 2. What needed to be improved? That is, what “bad code smell” was detected? Use the terminology found in the Fowler text. 
 
-The bad code smell I have here is speculative generality. I added code for future expansion, but if I’m being honest with myself, the feature is a lot more trouble to implement then it seems to be worth (at least given the time I have to finish this assignment!)
+The bad code smell I have here is **speculative generality**. I added code for future expansion, but if I’m being honest with myself, the feature is a lot more trouble to implement then it seems to be worth (at least given the time I have to finish this assignment!)
 
 ### 3. What refactoring was applied? What steps did you follow? Use the terminology and mechanics outlined in the Fowler text. 
 
 I completely gutted all the file I/O code used to generate and toy with word lists, and replaced them with runtime alternatives.
 
-I also had to change how generateAnagramsWordsets worked to only generate a single wordset. 
+I also had to change how generateAnagramsWordsets worked to only generate a single wordset (using the **rename method**). 
 
 Both of the above changes were committed on (SHA: 5653357). Sorry I didn't break it up, but I ended up changing more than I anticipated.
 
-As I was updating the class however, I realized I was using a long list of parameters in some of my functions.
+As I was updating the class however, I realized I was using a **long list of parameters** in some of my functions.
 
 To solve this problem pre-emptively, I created an inline Parameters class, and used it to send minlength, maxlength and target all in one go. This fits under **introducing a parameter object**.
 
@@ -311,11 +324,13 @@ I also made sure to test that any permutation contained only letters in the root
 
 Now, only code that is actually useful and runs - whether it be in an IDE or in a JAR, is included in the project.
 
-It also allowed me to make a few other changes to simplify my code in other areas. 
+There is no longer any confusing I/O methods sitting around unused and cluttering up everything, making future code a lot easier to follow. 
+
+It also allowed me to make a few other changes to simplify my code in other areas. (see the last paragraph of 3.)
 
 ### 7. Does the result of the refactoring suggest or enable further refactorings?
 
-No, finally. While more functionality could be added and later refactored, I think the core project code (excluding tests) is pretty much the best it's going to get.
+No, finally. While more functionality could be added and later refactored, I think the core project code (excluding tests) is pretty much the best it's going to get and any refactoring from this point on would be relatively minor housekeeping.
 
 
 # Conclusion:
@@ -324,4 +339,4 @@ After my second change, I continued to work on the secondary branch of my projec
 
 At the end, I merged (SHA: a01b260f) changes 3-6 to the main branch. 
 
-All that's left is a bit of housekeeping - specifically, making the formatting of this readme a lot nicer (SHA: ) and commenting all my code (SHA: ).  
+All that's left is a bit of housekeeping - specifically, making the formatting of this readme a lot nicer (SHA: 651b0ce, ) and commenting all my code (SHA: ).  
