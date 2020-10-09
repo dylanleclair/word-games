@@ -340,3 +340,7 @@ After my second change, I continued to work on the secondary branch of my projec
 At the end, I merged (SHA: a01b260f) changes 3-6 to the main branch. 
 
 All that's left is a bit of housekeeping - specifically, making the formatting of this readme a lot nicer (SHAs: 651b0ce, 1569517) and commenting all my code (SHA: add2fe1).  
+
+To play my games, you simply have to run the jar file at the root of my repository. 
+
+If on Windows, you can do this by double clicking the start.bat file. Otherwise, run as a normal jar file.
