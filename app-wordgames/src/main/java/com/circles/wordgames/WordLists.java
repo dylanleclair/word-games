@@ -30,10 +30,10 @@ public class WordLists {
      * @return the list of anagrams
      */
     public static ArrayList<String> generateAnagramsList (Parameters parameters) {
-     
+
+
         ArrayList<String> output;
         ArrayList<String> words = new ArrayList<String>();
-
 
         InputStream is = WordLists.class.getClassLoader().getResourceAsStream(App.ANAGRAMSWORDLIST);
 
@@ -56,8 +56,7 @@ public class WordLists {
         // select a random rootword from words and generate permutations!
 
         Random r = new Random();
-        
-        
+    
 
         do {
             int index = r.nextInt(words.size());
