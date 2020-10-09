@@ -70,7 +70,7 @@ public class WordLists {
 
     }
     
-    private static ArrayList<String> findPermutations(WordTree wordtree, String word, Parameters parameters) {
+    public static ArrayList<String> findPermutations(WordTree wordtree, String word, Parameters parameters) {
         
 
         ArrayList<String> output = new ArrayList<String>();
