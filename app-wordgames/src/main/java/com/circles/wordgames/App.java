@@ -2,6 +2,8 @@ package com.circles.wordgames;
 
 import java.util.Scanner;
 
+import com.circles.wordgames.Game.IGame;
+
 /**
  * Hello world!
  *
@@ -10,53 +12,43 @@ public class App
 {
 
     static final String ANAGRAMSWORDLIST = "collinsscrabble.txt";
-    static final String WORDSNDIR = "wordsbylength";
-    static final String WORDSETDIR = "wordsets";
-
 
     static Scanner scanner = new Scanner(System.in);
 
     public static void main( String[] args )
     {
-        // have user specify which game they want to play
-        
-        //Hangman lol = new Hangman(5);
+
+        // testing out Anagrams with new implementation
 
         try {
-            //WordTree w = new WordTree(ANAGRAMSWORDLIST);
-            
-            //ArrayList<String> result = w.findPermutations("lagoon");
-            //w.generateAnagramsSets(3, 6, 70);
 
-            
-
-
-            System.out.println("lol");
             Anagrams a = new Anagrams();
-            a.runGame();
+            runGame(a, scanner);
 
-
-            /*
-                        while (true) {
-                String in = scanner.next();
-                in.toLowerCase().trim();
-
-                System.out.println(w.findWord(in));
-
-            }
-            */
-            
-            
-            //w.generateAnagramsSets(3, 6, 70);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
 
+        // while we're at it, lets play both:
 
-
+        try { 
+            // create a hangman game where you have 8 incorrect guesses
+            Hangman h = new Hangman(8); 
+            runGame(h, scanner);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         scanner.close();
 
     }
+
+
+    public static void runGame(IGame game, Scanner s) {
+        game.setup();
+        game.play(s);
+        game.end();
+    }
+
+
 }
