@@ -7,6 +7,11 @@ import java.util.Scanner;
 import com.circles.wordgames.Game.IGame;
 import com.circles.wordgames.WordLists.Parameters;
 
+/**
+ * The Game class that implements IGame to run a simple game of Anagrams.
+ * @author Dylan Leclair
+ *
+ */
 public class Anagrams extends Game implements IGame {
 
     protected LightWordTree wordset;
@@ -15,16 +20,18 @@ public class Anagrams extends Game implements IGame {
     private int score = 0;
     public ArrayList<String> contents;
 
-    private final boolean debug = true;
+    private final boolean debug = false;
 
     public Anagrams() {
 
     }
 
 
-    // chooses a random wordset from a WORDSETDIR directory
-    // we now need to choose a random file from word lists
-    private LightWordTree chooseWordSet() throws Exception {
+    /**
+     * Generates a list of words to play anagrams with, updating the root word and building a LightWordTree to play the game with.
+     * @return a LightWordTree containing all the anagrams created with default parameters.
+     */
+    private LightWordTree chooseWordSet() {
 
 
         contents = WordLists.generateAnagramsList(new Parameters(3,6,70));
@@ -48,7 +55,6 @@ public class Anagrams extends Game implements IGame {
 
     }
 
-    
     @Override
     public void setup() {
         System.out.println("Moving into setup state.");
@@ -67,26 +73,28 @@ public class Anagrams extends Game implements IGame {
         System.out.println("Letters: " + rootword + " (guess \"s\" to shuffle!)" + "\n");
     }
 
+    
     @Override
     public void play(Scanner s) {
         while (correctlyGuessed.size() < 10) {
-            int addToScore = 0;
-            String guess = getInput(s);
+            int addToScore = 0; // score for this turn
+            String guess = getInput(s); // guess / input for this turn
 
             if (guess.contentEquals("s")) {
-                Collections.shuffle(rootword);
+                Collections.shuffle(rootword); // if input is s, shuffle the letters.
 
                 System.out.println("Words have been shuffled!");
 
-            } else {
-                if (!correctlyGuessed.contains(guess)) {
+            } else { // otherwise, run the turn normally
+                if (!correctlyGuessed.contains(guess)) { // if this turns guess has not already been inputted
                     try {
-                        if (wordset.findWord(guess)) {
-                            
-                            addToScore = (guess.length() * guess.length() ) * 100;
+                        if (wordset.findWord(guess)) { // look for the guess in the wordset
+                            //if it's found
+                            addToScore = (guess.length() * guess.length() ) * 100; 
                             correctlyGuessed.add(guess);
                             System.out.println("Correct! +" + addToScore + "!");
                         } else { 
+                        	// if it isn't
                             System.out.println("Not an anagram! :(");
                         }
                     } catch (Exception e) {
@@ -96,14 +104,15 @@ public class Anagrams extends Game implements IGame {
                 } else {
                     System.out.println("You've already guessed that!");
                 }
-                score += addToScore;
+                score += addToScore; // update score
             }
 
 
-            printState();
+            printState(); // print the state summary
         }
 
     }
+
 
     @Override
     public void end() {
@@ -114,7 +123,6 @@ public class Anagrams extends Game implements IGame {
         System.out.println("You've won! :D");
         printState();
     }
-
 
     @Override
     public void printState() {

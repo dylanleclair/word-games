@@ -10,13 +10,17 @@ import com.circles.wordgames.Game.IGame;
 public class Hangman extends Game implements IGame {
 
     protected String word;
-    private final String WORDSPATH = "commonwords.txt";
-    private ArrayList<Character> guessed = new ArrayList<Character>();
+    private final String WORDSPATH = "commonwords.txt"; // the filepath to common words list
+    private ArrayList<Character> guessed = new ArrayList<Character>(); 
     private int correct = 0;
-    private int guesses;
+    private int guesses; // remaining guesses
 
 
-    // chooses a random word from a list of words in the text file named by WORDSPATH.
+    /**
+     * Reads from a list of common words and chooses one to play Hangman with
+     * @return the chosen word
+     * @throws Exception - the file cannot be opened/is blank.
+     */
     private String chooseWord() throws Exception {
 
         InputStream is = getClass().getClassLoader().getResourceAsStream(WORDSPATH);
@@ -40,6 +44,11 @@ public class Hangman extends Game implements IGame {
 
     }
 
+    /**
+     *  Makes sure that a guess only contains a single character.
+     * @param s
+     * @return
+     */
     private Character validateGuess (Scanner s) {
 
         String guess = getInput(s);
@@ -55,6 +64,10 @@ public class Hangman extends Game implements IGame {
 
     }
 
+    
+    /**
+     * @return the word with guessed letters filled in, others left blank.
+     */
     private String wordWithBlanks() {
         String output = "";
 
@@ -75,6 +88,10 @@ public class Hangman extends Game implements IGame {
         System.out.println(summarizeState());
     }
 
+    /**
+     * Provides a summary of the state of this game!
+     * @return
+     */
     public String summarizeState() {
         String output = "";
         output += "Current state: " + wordWithBlanks() +"\n";
@@ -161,6 +178,10 @@ public class Hangman extends Game implements IGame {
 
     }
 
+    /**
+     * A constructor that allows the number of guesses to be specified.
+     * @param guesses the number of incorrect guesses allowed before the game is lost.
+     */
     public Hangman(int guesses) {
 
         this.guesses = guesses;
