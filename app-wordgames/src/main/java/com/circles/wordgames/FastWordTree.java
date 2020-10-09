@@ -23,7 +23,6 @@ public class FastWordTree extends WordTree {
     }
 
 
-
     class FastNode extends Node implements INode {
 
         protected HashMap<Character, FastNode> letters;

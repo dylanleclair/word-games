@@ -12,9 +12,6 @@ public class App
 {
 
     static final String ANAGRAMSWORDLIST = "collinsscrabble.txt";
-    static final String WORDSNDIR = "wordsbylength";
-    static final String WORDSETDIR = "wordsets";
-
 
     static Scanner scanner = new Scanner(System.in);
 

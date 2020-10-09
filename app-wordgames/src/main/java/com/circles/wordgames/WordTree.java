@@ -24,6 +24,17 @@ public abstract class WordTree implements IWordTree {
 
     }
 
+    public WordTree() {
+
+    }
+
+    public WordTree(INode root, ArrayList<String> words) {
+        this.root = root;
+        for (String word : words) {
+            word.toLowerCase().trim();
+            addWord(word);
+        }
+    }
 
     public boolean findWord (String word) {
         INode n = root;
