@@ -40,7 +40,7 @@ public class Hangman extends Game implements IGame {
 
     }
 
-    private Character runGuess (Scanner s) {
+    private Character validateGuess (Scanner s) {
 
         String guess = getInput(s);
 
@@ -54,8 +54,6 @@ public class Hangman extends Game implements IGame {
         return null;
 
     }
-
-
 
     private String wordWithBlanks() {
         String output = "";
@@ -106,7 +104,7 @@ public class Hangman extends Game implements IGame {
         while (correct < word.length() && guesses > 0) {
 
 
-            Character c = runGuess(s);
+            Character c = validateGuess(s);
             
             if (c != null) {
 

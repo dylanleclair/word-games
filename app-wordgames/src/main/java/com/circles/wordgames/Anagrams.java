@@ -15,6 +15,8 @@ public class Anagrams extends Game implements IGame {
     private int score = 0;
     public ArrayList<String> contents;
 
+    private final boolean debug = true;
+
     public Anagrams() {
 
     }
@@ -35,7 +37,11 @@ public class Anagrams extends Game implements IGame {
             rootword.add(ch);
         }
 
-        System.out.println(contents);
+        if (debug) {
+            System.out.println(contents);
+        }
+
+
 
         return new LightWordTree(contents);
 
@@ -57,6 +63,7 @@ public class Anagrams extends Game implements IGame {
 
         Collections.shuffle(rootword);
         System.out.println("Starting game! Find as many anagrams as you can!");
+        System.out.println("There are " + contents.size() + " anagrams to find!");
         System.out.println("Letters: " + rootword + " (guess \"s\" to shuffle!)" + "\n");
     }
 

@@ -57,10 +57,15 @@ public class WordLists {
 
         Random r = new Random();
         
-        int index = r.nextInt(words.size());
-
         
-        output = findPermutations(light, words.get(index), parameters);
+
+        do {
+            int index = r.nextInt(words.size());
+            output = findPermutations(light, words.get(index), parameters);
+        } 
+        while (output.size() < parameters.target);
+        
+        
 
         return output;
 
