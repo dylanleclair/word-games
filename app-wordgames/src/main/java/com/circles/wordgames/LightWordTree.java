@@ -15,6 +15,12 @@ public class LightWordTree extends WordTree {
     
     }
 
+    public LightWordTree () {;
+
+        root = new LightNode(null, '0');
+    
+    }
+
 
     public class LightNode extends Node implements INode {
     

@@ -16,6 +16,13 @@ public class FastWordTree extends WordTree {
     
     }
 
+    public FastWordTree () {;
+
+        root = new FastNode(null, '0');
+    
+    }
+
+
 
     class FastNode extends Node implements INode {
 
