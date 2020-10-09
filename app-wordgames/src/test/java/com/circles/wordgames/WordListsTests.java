@@ -39,20 +39,37 @@ public class WordListsTests {
 
         String root = "catastrophic";
 
-        List<String> testWords = Arrays.asList("rat", "rats", "cats", "cat", root, "catastrophe");
+        List<String> testWords = Arrays.asList("rat", "rats", "cats", "cat", root, "catastrophe", "start", "flat", "fire", "bottle");
 
         LightWordTree light = new LightWordTree(testWords);
 
         List<String> results = WordLists.findPermutations(light, root, new Parameters(3,root.length(), 0));
 
+        boolean test = true;
+
+        ArrayList<Character> letters = new ArrayList<Character>();
+
+        for (Character c : root.toCharArray()) {
+            letters.add(c);
+        }
+
+        for (String result : results) {
+            for (Character c : result.toCharArray()) {
+                if (!letters.contains(c)) {
+                    test = false;
+                }
+            }
+        }
+
+        assertTrue(test);
 
         assertTrue(results.contains("cat"));
         assertTrue(results.contains("cats"));
         assertTrue(results.contains("rat"));
         assertTrue(results.contains("rats"));
+        assertTrue(results.contains("start"));
 
         assertFalse(results.contains("rope"));
-        assertFalse(results.contains("start"));
         assertFalse(results.contains("star"));
 
 
