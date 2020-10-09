@@ -23,7 +23,7 @@ public class LightWordTree extends WordTree {
             wordsFromFile.add(line);
         }
 
-        wordsLengthN(wordsFromFile);
+        //wordsLengthN(wordsFromFile);
         
         scanner.close();
     }
