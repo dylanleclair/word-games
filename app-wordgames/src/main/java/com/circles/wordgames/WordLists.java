@@ -1,173 +1,77 @@
 package com.circles.wordgames;
 
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 
 public class WordLists {
 
 
-    protected final String WORDSNDIR = "wordsbylength";
-    protected final String WORDSETDIR = "wordsets";
+    public static class Parameters {
+        final int minlength;
+        final int maxlength;
+        final int target;
+
+        Parameters(int minlength, int maxlength, int target) {
+            this.minlength = minlength;
+            this.maxlength = maxlength;
+            this.target = target;
+        }
+
+    }
 
 
-    public void wordsLengthN (ArrayList<String> words) {
+    /**
+     * Creates an Anagrams word list such that the root word is the first item in the list,
+     * followed by it's anagrams.
+     * @param parameters the specifications for the list to meet
+     * @return the list of anagrams
+     */
+    public static ArrayList<String> generateAnagramsList (Parameters parameters) {
+     
+        ArrayList<String> output;
+        ArrayList<String> words = new ArrayList<String>();
 
-        HashMap<Integer,ArrayList<String>> wordsbylength = new HashMap<Integer,ArrayList<String>>();
 
-        for (String word : words) {
+        InputStream is = WordLists.class.getClassLoader().getResourceAsStream(App.ANAGRAMSWORDLIST);
 
+        Scanner s = new Scanner(is);
+
+        
+        LightWordTree light = new LightWordTree(Arrays.asList());
+
+        while (s.hasNext()) {
+            String word = s.next();
             word = word.toLowerCase().trim();
-
-            if (word.length() > 0) {
-                if (!wordsbylength.containsKey(word.length())) {
-                    wordsbylength.put(word.length(), new ArrayList<String>());
-                } 
-
-                wordsbylength.get(word.length()).add(word);
+            light.addWord(word);
+            if (word.length() == parameters.maxlength) {
+                words.add(word);
             }
-
-
         }
 
-        try {
-            
-            URI uri = getClass().getClassLoader().getResource(".").toURI();
-            String mainpath = Paths.get(uri).toString() + File.separator + WORDSNDIR;
-            Path path = Paths.get(mainpath);
-            Files.createDirectories(path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        s.close();
 
+        // select a random rootword from words and generate permutations!
 
-        for (Map.Entry<Integer, ArrayList<String>> entry : wordsbylength.entrySet()) {
-            Integer key = entry.getKey();
-            ArrayList<String> value = entry.getValue();
-
-            String lol = getClass().getClassLoader().getResource(WORDSNDIR).getPath();
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File(lol + File.separator + "words" + key +".txt")));
-                for (String s : value) {
-                    writer.write(s+"\n");
-                }
-                writer.flush();
-                writer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        Random r = new Random();
+        
+        int index = r.nextInt(words.size());
 
         
-        }
+        output = findPermutations(light, words.get(index), parameters);
 
-
-
-    }
-
-
-    public void generateAnagramsSets(WordTree wordtree, int minlength, int maxlength, int target) {
-
-        // finish porting
-
-        if (minlength > maxlength || minlength < 0 || maxlength < 2 || target < 0)
-        {
-            return;
-        }
-
-        // generate list of words in tree with length = maxlength
-
-        InputStream is = getClass().getClassLoader().getResourceAsStream(WORDSNDIR + File.separator + "words" + maxlength +".txt");
-
-        Scanner scanner = new Scanner (is);
-        ArrayList<String> wordsFromFile = new ArrayList<String>();
-
-        
-        // read 
-
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            line = line.toLowerCase().trim();
-            wordsFromFile.add(line);
-        }
-
-        // take each word in this list, and generate all of it's permutations
-
-
-        try {
-            
-            URI uri = getClass().getClassLoader().getResource(".").toURI();
-            String mainpath = Paths.get(uri).toString() + File.separator + WORDSETDIR;
-            Path path = Paths.get(mainpath);
-            Files.createDirectories(path);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        for (String word : wordsFromFile) {
-
-            ArrayList<String> perms = findPermutations(wordtree, word);
-
-            ArrayList<String> output = new ArrayList<String>();
-            
-            
-            for (String perm : perms) {
-                // filter these permutations according to minlength
-                if (!(perm.length() < Math.max(2, minlength))) {
-                    output.add(perm);
-                }
-
-
-                // if the root word has created at least <target> permutations, write this wordset to wordset directory
-
-            }
-            
-
-            if (output.size() > target) {
-
-
-                String lol = getClass().getClassLoader().getResource(WORDSETDIR).getPath();
-                try {
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File(lol + File.separator + word +".txt")));
-                    for (String s : output) {
-                        writer.write(s+"\n");
-                    }
-                    writer.flush();
-                    writer.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                //write the file
-
-            }
-
-
-
-
-        }
-
-
-
-        scanner.close();
+        return output;
 
     }
-
     
-    public ArrayList<String> findPermutations(WordTree wordtree, String word) {
+    private static ArrayList<String> findPermutations(WordTree wordtree, String word, Parameters parameters) {
         
 
         ArrayList<String> output = new ArrayList<String>();
+
+        output.add(word);
 
         ArrayList<Character> chars = new ArrayList<Character>();
 
@@ -175,15 +79,13 @@ public class WordLists {
             chars.add(c);
         }
         
-        
-
         findPermutationsHelper(wordtree.root, chars, output);
 
-        return output;
+        return filterPermutations(output, parameters);
     }
 
 
-    private void findPermutationsHelper (INode node, ArrayList<Character> characters, ArrayList<String> permutations) { 
+    private static void findPermutationsHelper (INode node, ArrayList<Character> characters, ArrayList<String> permutations) { 
         
         if (characters.size() > 0 ) {
             for (Character c : characters) {
@@ -229,5 +131,21 @@ public class WordLists {
 
     }
 
+
+    private static ArrayList<String> filterPermutations(ArrayList<String> perms, Parameters p) {
+
+        ArrayList<String> output = new ArrayList<String>();
+
+        for (String word : perms) {
+            int size = word.length();
+            if (size <= p.maxlength && size >= Math.min(2, size)) {
+                output.add(word);
+            }
+        }
+
+        return output;
+        
+
+    }
 
 }
