@@ -1,7 +1,6 @@
 # wordgames - a suite of word games (hangman and anagrams)
 
-
- My first CPSC 501 assignment. This was to test refactoring, and was imported from a private gitlab repo on the UofC server. 
+My first CPSC 501 assignment. This was to test refactoring, and was imported from a private gitlab repo on the UofC server. 
 
 
 Below are details of the refactorings I did to arrive at the present codebase!
